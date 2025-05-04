@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="{{ asset('css/category-form.css') }}">
+<link rel="stylesheet" href="{{ asset('css/category-advanced.css') }}">
 <style>
 .switch-cat-type {
     display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;
@@ -26,12 +27,32 @@
 .cat-section.active { display: block; }
 .form-switch { display: flex; align-items: center; gap: .5rem; }
 .form-switch input[type="checkbox"] { width: 1.4em; height: 1.4em; }
+.code-switch {display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.code-switch label {font-size:.98rem;}
+.manage-btn {margin-right: 8px; font-size: 14px;}
+.manage-btn i {margin-left: 4px;}
+/* --- Popup Modal --- */
+.modal-popup-bg {
+    background: rgba(0,0,0,0.33); position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+}
+.modal-popup {
+    background: #fff; border-radius: 16px; padding: 1.5rem; min-width: 340px; box-shadow: 0 8px 24px rgba(30,41,59,.13);
+    position: relative; max-width: 95vw;
+}
+.modal-popup .close-btn {
+    position: absolute; top: 10px; left: 20px; background: none; border: none; font-size: 1.6rem; color: #999;
+}
+.table-responsive {max-height: 260px;overflow:auto;}
+.modal-popup-table th, .modal-popup-table td {padding: 7px 10px; text-align: right;}
+.modal-popup-table th {background: #f8fafc;}
+.modal-popup-table tr td:last-child {text-align:center;}
 </style>
 @endsection
 
 @section('content')
 <div class="container py-5">
-    <div class="mx-auto bg-white shadow rounded-3xl p-5" style="max-width: 600px;">
+    <div class="mx-auto bg-white shadow rounded-3xl p-5" style="max-width: 640px;">
         <h2 class="mb-2 text-blue-700 fw-bold d-flex align-items-center gap-2" style="font-size:1.7rem">
             <i class="fa fa-layer-group text-blue-400"></i>
             مدیریت دسته‌بندی‌ها
@@ -63,13 +84,14 @@
                     </label>
                     <div class="text-muted" style="font-size:0.95rem;">تصویر دسته‌بندی</div>
                 </div>
+                <div class="mb-3 code-switch">
+                    <input type="checkbox" id="person-autocode" checked>
+                    <label for="person-autocode">کد خودکار</label>
+                    <input type="text" name="code" id="person-code" value="per-001" class="form-control" readonly style="width:170px;">
+                </div>
                 <div class="mb-3">
                     <label class="form-label">نام دسته‌بندی <span class="text-danger">*</span></label>
                     <input type="text" name="title" class="form-control" required maxlength="100">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">کد دسته‌بندی <span class="text-danger">*</span></label>
-                    <input type="text" name="code" class="form-control" required maxlength="20">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">دسته والد</label>
@@ -80,15 +102,13 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">نوع شخص</label>
-                    <select name="person_type" class="form-select">
-                        <option value="">انتخاب کنید</option>
-                        <option>مشتری</option>
-                        <option>تأمین‌کننده</option>
-                        <option>کارمند</option>
-                        <option>سهامدار</option>
-                        <option>سایر</option>
+                <div class="mb-3 d-flex gap-2 align-items-center">
+                    <label class="form-label mb-0">نوع شخص</label>
+                    <button type="button" class="btn btn-outline-secondary btn-sm manage-btn" onclick="openModal('personType')"><i class="fa fa-cog"></i>مدیریت</button>
+                    <select name="person_type" id="person-type-select" class="form-select" style="width:200px;">
+                        @foreach($personTypes as $pt)
+                            <option value="{{ $pt }}">{{ $pt }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="mb-3">
@@ -119,13 +139,14 @@
                     </label>
                     <div class="text-muted" style="font-size:0.95rem;">تصویر دسته‌بندی</div>
                 </div>
+                <div class="mb-3 code-switch">
+                    <input type="checkbox" id="product-autocode" checked>
+                    <label for="product-autocode">کد خودکار</label>
+                    <input type="text" name="code" id="product-code" value="cat-pr1001" class="form-control" readonly style="width:170px;">
+                </div>
                 <div class="mb-3">
                     <label class="form-label">نام دسته‌بندی <span class="text-danger">*</span></label>
                     <input type="text" name="title" class="form-control" required maxlength="100">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">کد دسته‌بندی <span class="text-danger">*</span></label>
-                    <input type="text" name="code" class="form-control" required maxlength="20">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">دسته والد</label>
@@ -136,21 +157,14 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">واحد اصلی <span class="text-danger">*</span></label>
-                    <select name="unit" class="form-select" required>
-                        <option value="">انتخاب کنید</option>
-                        <option>عدد</option>
-                        <option>کیلوگرم</option>
-                        <option>متر</option>
-                        <option>لیتر</option>
-                        <option>بسته</option>
-                        <option>سایر</option>
+                <div class="mb-3 d-flex gap-2 align-items-center">
+                    <label class="form-label mb-0">واحد اصلی</label>
+                    <button type="button" class="btn btn-outline-secondary btn-sm manage-btn" onclick="openModal('unit')"><i class="fa fa-cog"></i>مدیریت</button>
+                    <select name="unit" id="unit-select" class="form-select" style="width:200px;">
+                        @foreach($units as $u)
+                            <option value="{{ $u }}">{{ $u }}</option>
+                        @endforeach
                     </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">حساب معین مرتبط <span class="text-danger">*</span></label>
-                    <input type="text" name="account_code" class="form-control" required maxlength="30" placeholder="مثلاً 1101">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">مالیات پیش‌فرض (%)</label>
@@ -184,13 +198,14 @@
                     </label>
                     <div class="text-muted" style="font-size:0.95rem;">تصویر دسته‌بندی</div>
                 </div>
+                <div class="mb-3 code-switch">
+                    <input type="checkbox" id="service-autocode" checked>
+                    <label for="service-autocode">کد خودکار</label>
+                    <input type="text" name="code" id="service-code" value="cat-ser1001" class="form-control" readonly style="width:170px;">
+                </div>
                 <div class="mb-3">
                     <label class="form-label">نام دسته‌بندی <span class="text-danger">*</span></label>
                     <input type="text" name="title" class="form-control" required maxlength="100">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">کد دسته‌بندی <span class="text-danger">*</span></label>
-                    <input type="text" name="code" class="form-control" required maxlength="20">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">دسته والد</label>
@@ -201,24 +216,18 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">نوع خدمت</label>
-                    <select name="service_type" class="form-select">
-                        <option value="">انتخاب کنید</option>
-                        <option>مشاوره</option>
-                        <option>تعمیرات</option>
-                        <option>آموزش</option>
-                        <option>حمل‌ونقل</option>
-                        <option>سایر</option>
+                <div class="mb-3 d-flex gap-2 align-items-center">
+                    <label class="form-label mb-0">نوع خدمت</label>
+                    <button type="button" class="btn btn-outline-secondary btn-sm manage-btn" onclick="openModal('serviceType')"><i class="fa fa-cog"></i>مدیریت</button>
+                    <select name="service_type" id="service-type-select" class="form-select" style="width:200px;">
+                        @foreach($serviceTypes as $st)
+                            <option value="{{ $st }}">{{ $st }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">نرخ پایه خدمت (تومان)</label>
                     <input type="number" name="base_rate" class="form-control" min="0" step="1000">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">حساب معین مرتبط <span class="text-danger">*</span></label>
-                    <input type="text" name="account_code" class="form-control" required maxlength="30">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">مالیات پیش‌فرض (%)</label>
@@ -241,40 +250,74 @@
         </div>
     </div>
 </div>
+
+{{-- === POPUPS === --}}
+{{-- personType --}}
+<div id="modal-personType" class="modal-popup-bg" style="display:none;">
+    <div class="modal-popup">
+        <button type="button" class="close-btn" onclick="closeModal('personType')">&times;</button>
+        <h5>مدیریت نوع شخص</h5>
+        <div class="table-responsive">
+            <table class="modal-popup-table table table-bordered">
+                <thead>
+                    <tr><th>عنوان</th><th>عملیات</th></tr>
+                </thead>
+                <tbody id="personType-list"></tbody>
+            </table>
+        </div>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control" id="personType-new" placeholder="افزودن نوع جدید">
+            <button class="btn btn-primary" type="button" onclick="addPopupItem('personType')">ثبت</button>
+        </div>
+    </div>
+</div>
+{{-- unit --}}
+<div id="modal-unit" class="modal-popup-bg" style="display:none;">
+    <div class="modal-popup">
+        <button type="button" class="close-btn" onclick="closeModal('unit')">&times;</button>
+        <h5>مدیریت واحد اصلی</h5>
+        <div class="table-responsive">
+            <table class="modal-popup-table table table-bordered">
+                <thead>
+                    <tr><th>عنوان</th><th>عملیات</th></tr>
+                </thead>
+                <tbody id="unit-list"></tbody>
+            </table>
+        </div>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control" id="unit-new" placeholder="افزودن واحد جدید">
+            <button class="btn btn-primary" type="button" onclick="addPopupItem('unit')">ثبت</button>
+        </div>
+    </div>
+</div>
+{{-- serviceType --}}
+<div id="modal-serviceType" class="modal-popup-bg" style="display:none;">
+    <div class="modal-popup">
+        <button type="button" class="close-btn" onclick="closeModal('serviceType')">&times;</button>
+        <h5>مدیریت نوع خدمت</h5>
+        <div class="table-responsive">
+            <table class="modal-popup-table table table-bordered">
+                <thead>
+                    <tr><th>عنوان</th><th>عملیات</th></tr>
+                </thead>
+                <tbody id="serviceType-list"></tbody>
+            </table>
+        </div>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control" id="serviceType-new" placeholder="افزودن نوع جدید">
+            <button class="btn btn-primary" type="button" onclick="addPopupItem('serviceType')">ثبت</button>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="{{ asset('js/category-advanced.js') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 <script>
-document.querySelectorAll('.switch-cat-type input[type="radio"]').forEach(function(radio) {
-    radio.addEventListener('change', function() {
-        document.querySelectorAll('.cat-section').forEach(function(sec){ sec.classList.remove('active'); });
-        if(this.value === "person") document.getElementById('cat-person').classList.add('active');
-        else if(this.value === "product") document.getElementById('cat-product').classList.add('active');
-        else if(this.value === "service") document.getElementById('cat-service').classList.add('active');
-    });
-});
 
-// تصویر (پیش‌نمایش) برای هر فرم
-function previewImg(inputId, imgId) {
-    document.getElementById(inputId).addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = ev => document.getElementById(imgId).src = ev.target.result;
-            reader.readAsDataURL(file);
-        }
-    });
-}
-previewImg('person-cat-img-input', 'person-cat-img-preview');
-previewImg('product-cat-img-input', 'product-cat-img-preview');
-previewImg('service-cat-img-input', 'service-cat-img-preview');
 
-['person-cat-dropzone','product-cat-dropzone','service-cat-dropzone'].forEach(function(id, i){
-    document.getElementById(id).onclick = function(){
-        this.querySelector('input[type="file"]').click();
-    };
-});
 </script>
 @endsection

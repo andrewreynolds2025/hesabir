@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\CategoryOptionController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -34,6 +34,16 @@ Route::post('/categories/ajax-create', [CategoryController::class, 'ajaxCreate']
 Route::get('/categories-list', [CategoryController::class, 'list'])->name('categories.list');
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+
+Route::resource('category-options', CategoryOptionController::class)->only([
+    'index', 'store', 'update', 'destroy'
+]);
+
+
+Route::get('/category-options', [CategoryOptionController::class, 'index']);
+Route::post('/category-options', [CategoryOptionController::class, 'store']);
+Route::put('/category-options/{id}', [CategoryOptionController::class, 'update']);
+Route::delete('/category-options/{id}', [CategoryOptionController::class, 'destroy']);
 
 
 require __DIR__.'/auth.php';
