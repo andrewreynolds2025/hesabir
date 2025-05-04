@@ -36,6 +36,18 @@ input[type="number"], input[type="text"], input[type="date"], .persian-datepicke
 .cat-modal .cat-list { max-height: 220px; overflow-y: auto; margin-top: 1rem; }
 .cat-modal .cat-item { display: flex; align-items: center; justify-content: space-between; font-size: 1rem; padding: .35rem .5rem; border-radius: 7px; cursor: pointer; transition: background .2s; }
 .cat-modal .cat-item.active, .cat-modal .cat-item:hover { background: #f1f5f9; }
+
+/** بانک جدید: modal **/
+#bankModalBg {
+    background: rgba(0,0,0,.33); position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+}
+#bankModal { background: #fff; border-radius: 16px; padding: 1.5rem; min-width: 340px; box-shadow: 0 8px 24px rgba(30,41,59,.13); position: relative; max-width: 95vw; }
+#bankModal input, #bankModal button { font-family: 'IRANSans', Tahoma, Arial, sans-serif !important; }
+#bankModal .bank-table { width: 100%; border-collapse: collapse; margin: 1rem 0 .5rem 0; }
+#bankModal .bank-table th, #bankModal .bank-table td { padding: 7px 10px; border-bottom: 1px solid #f1f5f9; text-align: left; }
+#bankModal .bank-table th { background: #f8fafc; }
+#bankModal .remove-bank-modal-row { color: #d32f2f; background: none; border: none; font-size: 1.1em; cursor: pointer;}
 </style>
 @endsection
 
@@ -193,6 +205,7 @@ input[type="number"], input[type="text"], input[type="date"], .persian-datepicke
                         </div>
                     </div>
                     <button type="button" id="addBankBtn" class="bg-primary text-white px-3 py-1 rounded mt-2">افزودن حساب بانکی جدید</button>
+                    <button type="button" id="openBankModalBtn" class="bg-accent text-white px-3 py-1 rounded mt-2 ml-2">مدیریت حساب‌های بانکی دیگر</button>
                 </div>
                 {{-- سایر --}}
                 <div class="tab-panel" data-tab="other">
@@ -238,13 +251,36 @@ input[type="number"], input[type="text"], input[type="date"], .persian-datepicke
         </div>
     </div>
 </div>
+
+{{-- پاپ‌آپ مدیریت حساب‌های بانکی (جدول جداگانه) --}}
+<div id="bankModalBg" style="display:none;">
+    <div id="bankModal">
+        <div class="flex justify-between items-center mb-3">
+            <strong>جدول حساب‌های بانکی دیگر</strong>
+            <button type="button" onclick="closeBankModal()" style="background: none;border:none;font-size:1.6rem;color:#999">&times;</button>
+        </div>
+        <table class="bank-table w-full" id="otherBanksTable">
+            <thead>
+                <tr>
+                    <th>نام بانک</th>
+                    <th>شماره حساب</th>
+                    <th>شماره کارت</th>
+                    <th>شبا</th>
+                    <th>حذف</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button type="button" class="bg-primary text-white px-3 py-1 rounded mt-1" onclick="addOtherBankRow()">افزودن ردیف جدید</button>
+        <button type="button" class="bg-green-600 text-white px-4 py-1 rounded mt-3 float-left" onclick="saveOtherBanks()">ثبت و افزودن به فرم</button>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/persiandate@0.2.1/dist/persiandate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-date@0.1.8/dist/persian-date.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
 <script>
@@ -299,6 +335,62 @@ window.removeBankRow = function(btn) {
     btn.closest('.bank-row').remove();
 }
 
+// --- بانک جدید: مدیریت حساب‌های بانکی دیگر ---
+let bankModalBg = document.getElementById('bankModalBg');
+let otherBankIndex = 0;
+document.getElementById('openBankModalBtn').onclick = function() {
+    bankModalBg.style.display = "flex";
+    renderOtherBanksTable();
+}
+window.closeBankModal = function() {
+    bankModalBg.style.display = "none";
+}
+function addOtherBankRow() {
+    let tbody = document.querySelector('#otherBanksTable tbody');
+    let tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td><input type="text" class="form-input" name="other_banks[${otherBankIndex}][bank]" placeholder="بانک"></td>
+        <td><input type="text" class="form-input persian-num" name="other_banks[${otherBankIndex}][account]" placeholder="شماره حساب"></td>
+        <td><input type="text" class="form-input persian-num" name="other_banks[${otherBankIndex}][card]" placeholder="شماره کارت"></td>
+        <td><input type="text" class="form-input persian-num" name="other_banks[${otherBankIndex}][sheba]" placeholder="شبا"></td>
+        <td><button type="button" class="remove-bank-modal-row" onclick="this.closest('tr').remove()">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+    otherBankIndex++;
+}
+function renderOtherBanksTable() {
+    // اگر می‌خواهی داده‌های قبلی را لود کنی، اینجا پیاده کن
+}
+function saveOtherBanks() {
+    // مقدارها را می‌گذاری توی فرم اصلی (کپی می‌کنی)
+    let tbody = document.querySelector('#otherBanksTable tbody');
+    let newRows = [];
+    tbody.querySelectorAll('tr').forEach(tr => {
+        let tds = tr.querySelectorAll('input');
+        let row = [];
+        tds.forEach(td => row.push(td.value));
+        newRows.push(row);
+    });
+    // به فرم اصلی هم اضافه کن (همزمان در #bankAccounts)
+    let container = document.getElementById('bankAccounts');
+    newRows.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'flex gap-4 mb-2 bank-row';
+        div.innerHTML = `
+            <input type="text" name="banks[${bankRowIndex}][bank]" value="${row[0] || ''}" placeholder="بانک" class="form-input flex-1">
+            <input type="text" name="banks[${bankRowIndex}][account]" value="${row[1] || ''}" placeholder="شماره حساب" class="form-input flex-1 persian-num">
+            <input type="text" name="banks[${bankRowIndex}][card]" value="${row[2] || ''}" placeholder="شماره کارت" class="form-input flex-1 persian-num">
+            <input type="text" name="banks[${bankRowIndex}][sheba]" value="${row[3] || ''}" placeholder="شبا" class="form-input flex-1 persian-num">
+            <button type="button" class="remove-bank-row bg-red-500 text-white px-2 py-1 rounded" onclick="removeBankRow(this)">حذف</button>
+        `;
+        container.appendChild(div);
+        bankRowIndex++;
+    });
+    tbody.innerHTML = "";
+    closeBankModal();
+    Swal.fire({ icon: 'success', title: 'حساب‌های بانکی جدید اضافه شد', timer: 1000, showConfirmButton: false });
+}
+
 // اعتبارسنجی سمت کلاینت و SweetAlert2 (نام، نوع شخص، تاریخ عضویت)
 document.getElementById('personForm').addEventListener('submit', function(e) {
     const firstName = document.getElementById('first_name').value.trim();
@@ -333,11 +425,9 @@ window.openCatModal = function() {
 window.closeCatModal = function() {
     catModal.style.display = "none";
 }
-
 document.getElementById('catSearchInput').addEventListener('input', function() {
     fetchCategories(this.value);
 });
-
 function fetchCategories(query) {
     if(catLoading) return;
     catLoading = true;
@@ -365,8 +455,6 @@ function fetchCategories(query) {
             catLoading = false;
         });
 }
-
-// ایجاد دسته‌بندی جدید ajax
 window.createCategory = function() {
     var title = document.getElementById('newCatTitle').value.trim();
     if(!title) {
