@@ -17,6 +17,9 @@
 }
 .switch-cat-type input[type="radio"]:checked + span {
     color: #1565c0;
+}
+.switch-cat-type input[type="radio"]:checked + span,
+.switch-cat-type input[type="radio"]:focus + span {
     font-weight: bold;
     background: #e3f2fd;
     border-color: #1565c0;
