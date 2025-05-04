@@ -23,6 +23,12 @@ Route::get('/persons/create', [PersonController::class, 'create'])->name('person
 Route::post('/persons', [PersonController::class, 'store'])->name('persons.store');
 // برای دریافت آخرین کد حسابداری (AJAX)
 Route::get('/persons/latest-code', [PersonController::class, 'latestCode'])->name('persons.latestCode');
+Route::get('/persons/create', [PersonController::class, 'create'])->name('persons.create');
+Route::post('/persons', [PersonController::class, 'store'])->name('persons.store');
+
+Route::get('/categories/ajax-search', [CategoryController::class, 'ajaxSearch']);
+Route::post('/categories/ajax-create', [CategoryController::class, 'ajaxCreate']);
+// برای دریافت آخرین کد حسابداری (AJAX)
 
 // برای افزودن دسته‌بندی جدید (AJAX)
 Route::get('/categories-list', [CategoryController::class, 'list'])->name('categories.list');
