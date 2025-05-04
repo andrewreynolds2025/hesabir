@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>حسابیر | ورود / ثبت نام</title>
-    <link rel="stylesheet" href="/fonts/fonts.css">
+    <link rel="stylesheet" href="fonts/fonts.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

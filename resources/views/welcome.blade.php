@@ -6,7 +6,7 @@
     <title>حسابیر | نرم‌افزار حسابداری ساده</title>
     <link rel="icon" href="/favicon.ico">
     <!-- فونت آنجمن -->
-    <link rel="stylesheet" href="/fonts/fonts.css">
+    <link rel="stylesheet" href="fonts/fonts.css">
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
