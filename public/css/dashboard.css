@@ -1,0 +1,139 @@
+@import url('/fonts/fonts.css');
+body {
+    font-family: 'AnjomanMax', Tahoma, sans-serif !important;
+    background: #f9fafb;
+    direction: rtl;
+}
+.sidebar {
+    width: 270px;
+    background: #222e3c;
+    color: #fff;
+    transition: width 0.2s;
+    min-height: 100vh;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 40;
+}
+.sidebar.collapsed {
+    width: 70px;
+}
+.sidebar .logo {
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin: 32px 0 18px 0;
+    text-align: center;
+    letter-spacing: 0.1em;
+    color: #f59e42;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0 0.7rem;
+    margin: 0;
+}
+.sidebar .menu-item {
+    margin-bottom: 0.2rem;
+}
+.sidebar .menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+}
+.sidebar .menu-link.active,
+.sidebar .menu-link:hover {
+    background: #2563eb;
+    color: #fff;
+}
+.sidebar .menu-link .icon {
+    font-size: 1.3rem;
+    min-width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sidebar .submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s;
+    background: #263241;
+    border-radius: 0 0 10px 10px;
+    margin-right: 15px;
+}
+.sidebar .submenu.open {
+    max-height: 800px;
+    padding: 0.2rem 0 0.7rem 0;
+}
+.sidebar .submenu-link {
+    display: block;
+    padding: 10px 35px;
+    color: #d0d3d7;
+    font-size: 0.97rem;
+    border-radius: 7px;
+    margin-bottom: 2px;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+}
+.sidebar .submenu-link:hover,
+.sidebar .submenu-link.active {
+    background: #f59e42;
+    color: #fff;
+}
+.sidebar .toggle-btn {
+    position: absolute;
+    left: 14px;
+    top: 20px;
+    background: #f59e42;
+    color: #fff;
+    border: none;
+    border-radius: 100%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background 0.16s;
+    z-index: 100;
+}
+.sidebar.collapsed .menu-text,
+.sidebar.collapsed .submenu,
+.sidebar.collapsed .submenu.open {
+    display: none !important;
+}
+@media (max-width: 950px) {
+    .sidebar {
+        position: fixed;
+        width: 100vw;
+        min-height: unset;
+        height: 100vh;
+        z-index: 999;
+        top: 0;
+        right: 0;
+    }
+    .sidebar.collapsed {
+        width: 0;
+        overflow: hidden;
+    }
+}
+.main-content {
+    margin-right: 270px;
+    padding: 2rem 1.5rem;
+    transition: margin-right 0.2s;
+}
+.sidebar.collapsed ~ .main-content {
+    margin-right: 70px;
+}
+@media (max-width: 950px) {
+    .main-content {
+        margin-right: 0 !important;
+        padding: 1rem 0.5rem;
+    }
+}

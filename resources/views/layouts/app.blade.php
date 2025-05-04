@@ -1,36 +1,78 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>داشبورد | حسابیر</title>
+    <link rel="stylesheet" href="/fonts/fonts.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-xs8dF..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { fontFamily: { 'sans': ['AnjomanMax', 'Tahoma', 'sans-serif'] }, },
+            rtl: true,
+        }
+    </script>
+    <style>
+        body { background: #f9fafb; }
+    </style>
+    @yield('head')
+</head>
+<body>
+    @include('layouts.sidebar')
+    <div class="main-content" id="main-content">
+        @yield('content')
+    </div>
+    <script>
+        // اسکریپت باز و بسته شدن سایدبار و اکاردئون
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const submenuHeaders = document.querySelectorAll('.sidebar .menu-link.has-submenu');
+            let openSubmenu = null;
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+            toggleBtn.addEventListener('click', function () {
+                sidebar.classList.toggle('collapsed');
+                document.getElementById('main-content').classList.toggle('sidebar-collapsed');
+            });
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-    </body>
+            submenuHeaders.forEach(header => {
+                header.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // بستن زیرمنوی قبلی
+                    if (openSubmenu && openSubmenu !== this) {
+                        openSubmenu.classList.remove('active');
+                        openSubmenu.nextElementSibling.classList.remove('open');
+                    }
+                    // بازکردن فعلی
+                    const submenu = this.nextElementSibling;
+                    if (submenu.classList.contains('open')) {
+                        submenu.classList.remove('open');
+                        this.classList.remove('active');
+                        openSubmenu = null;
+                    } else {
+                        submenu.classList.add('open');
+                        this.classList.add('active');
+                        openSubmenu = this;
+                    }
+                });
+            });
+            // فعال کردن زیرمنوی جاری طبق url
+            const links = document.querySelectorAll('.submenu-link');
+            links.forEach(link => {
+                if (window.location.pathname === link.getAttribute('href')) {
+                    link.classList.add('active');
+                    const submenu = link.closest('.submenu');
+                    if (submenu) {
+                        submenu.classList.add('open');
+                        submenu.previousElementSibling.classList.add('active');
+                        openSubmenu = submenu.previousElementSibling;
+                    }
+                }
+            });
+        });
+    </script>
+    @yield('scripts')
+</body>
 </html>
