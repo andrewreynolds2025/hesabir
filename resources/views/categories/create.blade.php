@@ -2,13 +2,11 @@
 
 @section('head')
     <!-- Bootstrap 5 -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- FontAwesome 6 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <!-- IconPicker Modern -->
-    <link href="https://cdn.jsdelivr.net/npm/fontawesome-iconpicker@3.2.0/dist/css/fontawesome-iconpicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- Custom Form Styles -->
-    <link href="{{ asset('css/category-form.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/category-form.css') }}">
 @endsection
 
 @section('content')
@@ -49,21 +47,6 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label class="form-label d-block mb-2">آیکون دسته‌بندی</label>
-                <div class="d-flex align-items-center gap-2">
-                    <button type="button"
-                        class="btn btn-outline-primary"
-                        id="iconpicker-btn"
-                        data-icon="fa-solid fa-box"
-                        role="iconpicker">
-                        انتخاب آیکون
-                    </button>
-                    <span id="selected-icon" class="selected-icon-preview"><i class="fa-solid fa-box"></i></span>
-                    <input type="hidden" name="icon" id="icon-input" value="fa-solid fa-box">
-                </div>
-                <small class="text-muted">آیکون را از لیست انتخاب کنید</small>
-            </div>
-            <div class="mb-3">
                 <label class="form-label">توضیحات</label>
                 <textarea name="description" class="form-control" rows="3" maxlength="500" placeholder="توضیحات تکمیلی، ویژگی‌ها و ..."></textarea>
             </div>
@@ -79,11 +62,9 @@
 
 @section('scripts')
     <!-- Bootstrap 5 -->
-    <script src="{{ asset('/../js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <!-- FontAwesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
-    <!-- IconPicker Modern -->
-    <script src="https://cdn.jsdelivr.net/npm/fontawesome-iconpicker@3.2.0/dist/js/fontawesome-iconpicker.min.js"></script>
     <!-- Custom JS -->
     <script src="{{ asset('js/category-form.js') }}"></script>
 @endsection

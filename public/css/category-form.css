@@ -32,13 +32,6 @@
 .category-img-dropzone.dragover .category-img-edit-overlay {
     display: flex;
 }
-.selected-icon-preview {
-    display: inline-block;
-    font-size: 2.1rem;
-    margin-left: 15px;
-    vertical-align: middle;
-    color: #2563eb;
-}
 .form-control, .form-select {
     border-radius: 0.7rem;
     border: 1.5px solid #d1d5db;
