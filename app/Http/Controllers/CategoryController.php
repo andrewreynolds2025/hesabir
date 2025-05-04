@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+
 class CategoryController extends Controller
 {
     public function create()
@@ -15,11 +16,16 @@ class CategoryController extends Controller
         $productCategories = Category::where('type', 'product')->orderBy('title')->get(['id', 'title']);
         $serviceCategories = Category::where('type', 'service')->orderBy('title')->get(['id', 'title']);
 
-        // مقداردهی اولیه برای لیست‌های مربوط به هر تب
-        // اگر از دیتابیس category_options استفاده می‌کنید، اینجا لود کنید و به ویو بدهید
+        // آرایه انواع شخص و واحدها
+        $personTypes = ['مشتری', 'تأمین‌کننده', 'کارمند', 'سهامدار', 'سایر'];
+        $units = ['عدد', 'کیلوگرم', 'متر', 'لیتر', 'بسته', 'سایر'];
 
         return view('categories.create', compact(
-            'personCategories', 'productCategories', 'serviceCategories'
+            'personCategories',
+            'productCategories',
+            'serviceCategories',
+            'personTypes',
+            'units'
         ));
     }
 
