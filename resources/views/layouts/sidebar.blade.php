@@ -87,7 +87,7 @@ $user = Auth::user();
                     <i class="fa fa-list-ul ml-2"></i>
                     لیست قیمت کالا
                 </a>
-                <a href="/categories" class="submenu-link">
+                <a href="/categories/create" class="submenu-link">
                     <i class="fa fa-sitemap ml-2"></i>
                     دسته بندی
                 </a>

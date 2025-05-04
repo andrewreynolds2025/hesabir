@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,5 +25,9 @@ Route::post('/persons', [PersonController::class, 'store'])->name('persons.store
 Route::get('/persons/latest-code', [PersonController::class, 'latestCode'])->name('persons.latestCode');
 
 // برای افزودن دسته‌بندی جدید (AJAX)
-Route::post('/persons/add-category', [PersonController::class, 'addCategory'])->name('persons.addCategory');
+Route::get('/categories-list', [CategoryController::class, 'list'])->name('categories.list');
+Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+
+
 require __DIR__.'/auth.php';
