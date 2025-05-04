@@ -87,11 +87,11 @@ $user = Auth::user();
                     <i class="fa fa-list-ul ml-2"></i>
                     لیست قیمت کالا
                 </a>
-                <a href="/categories/create" class="submenu-link">
+                <a href="{{ route('categories.create') }}" class="submenu-link">
                     <i class="fa fa-sitemap ml-2"></i>
                     دسته بندی
                 </a>
-                <a href="/categories-list" class="submenu-link">
+                <a href="{{ route('categories.list') }}" class="submenu-link">
                     <i class="fa fa-sitemap ml-2"></i>
                     لیست دسته‌بندی‌ها
                 </a>

@@ -7,11 +7,11 @@
         @csrf
         <div class="mb-4">
             <label class="block mb-1 font-bold">نام دسته‌بندی <span class="text-red-500">*</span></label>
-            <input type="text" name="title" class="form-input w-full" value="{{ old('title') }}" required>
+            <input type="text" name="title" class="form-input w-full" required>
         </div>
         <div class="mb-4">
             <label class="block mb-1 font-bold">کد دسته‌بندی <span class="text-red-500">*</span></label>
-            <input type="text" name="code" class="form-input w-full" value="{{ old('code', $suggestedCode ?? '') }}" required>
+            <input type="text" name="code" class="form-input w-full" required>
         </div>
         <div class="mb-4">
             <label class="block mb-1 font-bold">دسته والد (اختیاری)</label>
@@ -28,11 +28,7 @@
         </div>
         <div class="mb-4">
             <label class="block mb-1 font-bold">توضیحات</label>
-            <textarea name="description" class="form-input w-full h-24">{{ old('description') }}</textarea>
-        </div>
-        <div class="mb-4">
-            <label class="block mb-1 font-bold">تاریخ ایجاد</label>
-            <input type="text" class="form-input w-full bg-gray-100 text-gray-500" value="{{ \Illuminate\Support\Carbon::now()->format('Y-m-d H:i') }}" readonly>
+            <textarea name="description" class="form-input w-full h-24"></textarea>
         </div>
         <div class="text-center">
             <button type="submit" class="bg-primary text-white px-8 py-3 rounded shadow hover:bg-accent">ثبت دسته‌بندی</button>

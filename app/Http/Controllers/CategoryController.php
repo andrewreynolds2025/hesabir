@@ -7,19 +7,11 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    // صفحه لیست دسته‌بندی‌ها
-    public function list()
-    {
-        $categories = Category::with('parent')->latest()->paginate(20);
-        return view('categories.list', compact('categories'));
-    }
-
-    // صفحه فرم ایجاد دسته‌بندی
+    // فرم ایجاد دسته‌بندی
     public function create()
     {
         $categories = Category::all();
-        $suggestedCode = str_pad(optional(Category::latest('id')->first())->id + 1, 4, '0', STR_PAD_LEFT);
-        return view('categories.create', compact('categories', 'suggestedCode'));
+        return view('categories.create', compact('categories'));
     }
 
     // ذخیره دسته‌بندی جدید
@@ -37,5 +29,12 @@ class CategoryController extends Controller
         }
         Category::create($data);
         return redirect()->route('categories.list')->with('success', 'دسته‌بندی با موفقیت ثبت شد.');
+    }
+
+    // لیست دسته‌بندی‌ها
+    public function list()
+    {
+        $categories = Category::with('parent')->latest()->paginate(20);
+        return view('categories.list', compact('categories'));
     }
 }

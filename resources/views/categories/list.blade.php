@@ -6,13 +6,11 @@
         <h1 class="text-2xl font-bold">لیست دسته‌بندی‌ها</h1>
         <a href="{{ route('categories.create') }}" class="bg-primary text-white px-4 py-2 rounded shadow">افزودن دسته‌بندی</a>
     </div>
-
     @if(session('success'))
         <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
             {{ session('success') }}
         </div>
     @endif
-
     <div class="bg-white rounded shadow overflow-x-auto">
         <table class="min-w-full table-auto">
             <thead class="bg-gray-50">
@@ -51,7 +49,6 @@
             </tbody>
         </table>
     </div>
-
     <div class="mt-6">
         {{ $categories->links() }}
     </div>
